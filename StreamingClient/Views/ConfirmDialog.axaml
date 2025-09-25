@@ -1,0 +1,16 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="StreamingClient.Views.ConfirmDialog"
+        Width="420" Height="160"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        Title="Confirmação">
+  <Grid RowDefinitions="* , Auto" Margin="12">
+    <TextBlock x:Name="MessageText" TextWrapping="Wrap"/>
+    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,12,0,0">
+      <Button Content="Cancelar" Click="OnCancel"/>
+      <Button Content="Confirmar" Click="OnConfirm"/>
+    </StackPanel>
+  </Grid>
+</Window>
+

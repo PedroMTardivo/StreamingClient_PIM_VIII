@@ -1,0 +1,97 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:StreamingClient.ViewModels"
+             xmlns:controls="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.DataGrid"
+             x:Class="StreamingClient.Views.MainView"
+             d:DesignWidth="900" d:DesignHeight="600">
+  <UserControl.DataContext>
+    <vm:MainViewModel/>
+  </UserControl.DataContext>
+
+  <Grid ColumnDefinitions="2*,3*" RowDefinitions="Auto,*">
+    <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="8" Spacing="8">
+      <TextBlock Text="Base API:" VerticalAlignment="Center"/>
+      <TextBox Width="260" Text="{Binding BaseUrl, UpdateSourceTrigger=PropertyChanged}"/>
+      <Button Content="Aplicar" Click="OnAplicarBaseUrl"/>
+      <Button Content="Carregar" Click="OnCarregarCriadores"/>
+      <TextBlock Text="{Binding StatusMessage}" Margin="12,0,0,0" VerticalAlignment="Center"/>
+    </StackPanel>
+
+    <StackPanel Grid.Row="1" Grid.Column="0" Margin="8" Spacing="8">
+      <TextBlock Text="Criadores" FontWeight="Bold"/>
+      <StackPanel Orientation="Horizontal" Spacing="4">
+        <TextBox Watermark="Nome do criador" Width="200" Text="{Binding NovoCriadorNome, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Content="Adicionar" Click="OnCriarCriador"/>
+      </StackPanel>
+              <ListBox ItemsSource="{Binding Criadores}" SelectedItem="{Binding CriadorSelecionado}">
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <TextBlock Text="{Binding Nome}"/>
+                      <Border Background="LightBlue" CornerRadius="10" Padding="4,2" Margin="4,0">
+                        <TextBlock Text="{Binding ContagemConteudos}" FontSize="10" FontWeight="Bold"/>
+                      </Border>
+                      <Button Content="Excluir" Tag="{Binding}" Click="OnExcluirCriador"/>
+                    </StackPanel>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+    </StackPanel>
+
+    <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Spacing="8">
+      <TextBlock Text="Conteúdos do Criador Selecionado" FontWeight="Bold"/>
+      <StackPanel Orientation="Horizontal" Spacing="4">
+        <TextBox Watermark="Título" Width="200" Text="{Binding NovoConteudoTitulo, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Watermark="Tipo (varchar)" Width="160" Text="{Binding NovoConteudoTipo, UpdateSourceTrigger=PropertyChanged}"/>
+        <ComboBox ItemsSource="{Binding Criadores}" SelectedItem="{Binding CriadorSelecionadoParaConteudo}" DisplayMemberBinding="{Binding Nome}" Width="150" PlaceholderText="Criador"/>
+        <Button Content="Escolher Arquivo" Click="OnEscolherArquivo"/>
+        <Button Content="Adicionar" Click="OnCriarConteudo"/>
+      </StackPanel>
+      <TextBlock Text="{Binding ArquivoSelecionado}" Margin="0,4,0,0" Foreground="Blue"/>
+
+        <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="60,*,150,220,160" Margin="4" Background="LightGray" Height="30">
+          <TextBlock Grid.Column="0" Text="ID" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+          <TextBlock Grid.Column="1" Text="Título" FontWeight="Bold" VerticalAlignment="Center" Margin="4,0"/>
+          <TextBlock Grid.Column="2" Text="Tipo" FontWeight="Bold" VerticalAlignment="Center" Margin="4,0"/>
+          <TextBlock Grid.Column="3" Text="Mídia" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+          <TextBlock Grid.Column="4" Text="Ações" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Conteudos}" Height="300">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Grid ColumnDefinitions="60,*,150,220,160" Margin="4" Height="50">
+                <TextBlock Grid.Column="0" Text="{Binding Id}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                
+                <!-- Coluna Título com ícone de lápis -->
+                <Grid Grid.Column="1" Margin="4,0">
+                  <TextBox Text="{Binding Titulo, Mode=TwoWay}" VerticalAlignment="Center" IsEnabled="{Binding IsEditing}" Background="White" Height="30"/>
+                  <Button Content="✏️" Tag="{Binding}" Click="OnEditarConteudo" HorizontalAlignment="Right" VerticalAlignment="Center" Width="30" Height="30" Background="LightBlue" BorderThickness="1" IsVisible="{Binding !IsEditing}"/>
+                </Grid>
+                
+                <!-- Coluna Tipo -->
+                <TextBox Grid.Column="2" Text="{Binding Varchar, Mode=TwoWay}" Margin="4,0" VerticalAlignment="Center" IsEnabled="{Binding IsEditing}" Background="White" Height="30"/>
+                
+                <!-- Coluna Mídia - só mostra Upload quando editando -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                  <Button Content="Upload" Tag="{Binding}" Click="OnUploadArquivo" Width="70" Height="30" IsVisible="{Binding IsEditing}" IsEnabled="{Binding !ArquivoPath}"/>
+                  <Button Content="Play" Tag="{Binding}" Click="OnPlayArquivo" Width="60" Height="30" IsEnabled="{Binding ArquivoPath}"/>
+                  <Button Content="Download" Tag="{Binding}" Click="OnDownloadArquivo" Width="80" Height="30" IsEnabled="{Binding ArquivoPath}"/>
+                </StackPanel>
+                
+                <!-- Coluna Ações -->
+                <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                  <Button Content="Salvar" Tag="{Binding}" Click="OnSalvarConteudo" Width="70" Height="30" IsVisible="{Binding IsEditing}"/>
+                  <Button Content="Cancelar" Tag="{Binding}" Click="OnCancelarEdicao" Width="80" Height="30" IsVisible="{Binding IsEditing}"/>
+                  <Button Content="Excluir" Tag="{Binding}" Click="OnExcluirConteudo" Width="70" Height="30" IsVisible="{Binding !IsEditing}"/>
+                </StackPanel>
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Grid>
+    </StackPanel>
+  </Grid>
+</UserControl>
+
