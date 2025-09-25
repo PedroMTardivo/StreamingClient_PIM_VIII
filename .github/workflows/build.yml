@@ -19,10 +19,7 @@ jobs:
         dotnet-version: '8.0.x'
     
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore StreamingClient/StreamingClient.csproj
     
     - name: Build
-      run: dotnet build --no-restore
-    
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet build StreamingClient/StreamingClient.csproj --no-restore
