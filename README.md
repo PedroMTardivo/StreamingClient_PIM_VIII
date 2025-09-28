@@ -50,7 +50,7 @@ dotnet run
 
 ### Configurar a API:
 1. Abra o cliente
-2. Na barra superior, configure a URL da API (ex: `http://localhost:5011`)
+2. Na barra superior, configure a URL da API (ex: `http://localhost:5011` OBS: Ela está rodando no render com o url de `https://streamingapi-pim-viii.onrender.com/`)
 3. Clique em "Aplicar"
 4. Clique em "Carregar" para buscar criadores
 
