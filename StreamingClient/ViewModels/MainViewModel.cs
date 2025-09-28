@@ -33,7 +33,7 @@ namespace StreamingClient.ViewModels
         private string novoConteudoTipo = string.Empty;
 
         [ObservableProperty]
-        private string baseUrl = "http://localhost:5011/";
+        private string baseUrl = "https://streamingapi-pim-viii.onrender.com/";
 
         [ObservableProperty]
         private string statusMessage = string.Empty;
